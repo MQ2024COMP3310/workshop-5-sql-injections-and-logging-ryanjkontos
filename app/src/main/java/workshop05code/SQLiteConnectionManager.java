@@ -128,9 +128,10 @@ public class SQLiteConnectionManager {
     public void addValidWord(int id, String word) {
 
         String pattern = "^[a-z]{4}$";
-        
+
         if (!word.matches(pattern)) {
             System.out.println("Ignored invalid input. Only 4-letter lowercase words are accepted.");
+            return;
           
         }
 
