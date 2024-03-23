@@ -126,17 +126,18 @@ public class SQLiteConnectionManager {
      * @param word the word to store
      */
     public void addValidWord(int id, String word) {
-
-        String sql = "INSERT INTO validWords(id,word) VALUES('" + id + "','" + word + "')";
-
+        String sql = "INSERT INTO validWords(id,word) VALUES(?, ?)";
+    
         try (Connection conn = DriverManager.getConnection(databaseURL);
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.setString(2, word);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
     }
+    
 
     /**
      * Possible weakness here?
@@ -145,23 +146,24 @@ public class SQLiteConnectionManager {
      * @return true if guess exists in the database, false otherwise
      */
     public boolean isValidWord(String guess) {
-        String sql = "SELECT count(id) as total FROM validWords WHERE word like'" + guess + "';";
-
+        String sql = "SELECT count(id) as total FROM validWords WHERE word = ?;";
+    
         try (Connection conn = DriverManager.getConnection(databaseURL);
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+            stmt.setString(1, guess);
+    
             ResultSet resultRows = stmt.executeQuery();
             if (resultRows.next()) {
                 int result = resultRows.getInt("total");
                 return (result >= 1);
             }
-
+    
             return false;
-
+    
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
         }
-
     }
+    
 }
