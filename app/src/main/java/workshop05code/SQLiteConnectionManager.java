@@ -146,6 +146,14 @@ public class SQLiteConnectionManager {
      * @return true if guess exists in the database, false otherwise
      */
     public boolean isValidWord(String guess) {
+
+        String pattern = "^[a-z]{4}$";
+
+        if (!guess.matches(pattern)) {
+            System.out.println("Input is not a valid guess. Please enter a 4-letter word consisting only of lowercase letters a-z.");
+            return false; 
+        }
+
         String sql = "SELECT count(id) as total FROM validWords WHERE word = ?;";
     
         try (Connection conn = DriverManager.getConnection(databaseURL);
