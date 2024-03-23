@@ -126,6 +126,14 @@ public class SQLiteConnectionManager {
      * @param word the word to store
      */
     public void addValidWord(int id, String word) {
+
+        String pattern = "^[a-z]{4}$";
+        
+        if (!word.matches(pattern)) {
+            System.out.println("Ignored invalid input. Only 4-letter lowercase words are accepted.");
+          
+        }
+
         String sql = "INSERT INTO validWords(id,word) VALUES(?, ?)";
     
         try (Connection conn = DriverManager.getConnection(databaseURL);
